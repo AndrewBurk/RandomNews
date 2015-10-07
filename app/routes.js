@@ -1,4 +1,5 @@
 var Todo = require('./models/todo');
+var log = require('../lib/log')(module);
 
 function getTodos(res){
 	Todo.find(function(err, todos) {
@@ -59,10 +60,7 @@ module.exports = function(app) {
 			if (err)
 				res.send(err);
 		});
-		Todo.find(function (err, todos) {
-			if (err) res.send(err)
-			res.json(todos);
-		});
+		res.json();
 	});
 
 	// application -------------------------------------------------------------

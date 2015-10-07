@@ -6,6 +6,7 @@ var config = require('./config'); 			// load the database config
 var log   = require('./lib/log')(module);
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
+var http = require('http');
 
 if (app.get('env') == 'development') {
   app.use(express.logger('dev'));
@@ -27,5 +28,22 @@ app.use(methodOverride('X-HTTP-Method-Override')); // override with the X-HTTP-M
 require('./app/routes.js')(app);
 
 // listen (start app with node server.js) ======================================
-app.listen(config.get('port'), function(){
+/*app.listen(config.get('port'), function(){
         log.info("App listening on port " + config.get('port'))});
+*/
+
+var server = http.createServer(app);
+
+server.listen(config.get('port'), function(){
+  log.info('Express server listening on port ' + config.get('port'));
+});
+
+        
+var io = require('socket.io').listen(server); 
+
+io.sockets.on('connection', function (socket) {
+    socket.on('message', function (text, cb) {
+        socket.broadcast.emit('message', text);
+        cb("123");
+    });
+});

@@ -25,7 +25,10 @@
 	<script src="js/controllers/main.js"></script> <!-- load up our controller -->
 	<script src="js/services/todos.js"></script> <!-- load our todo service -->
 	<script src="js/core.js"></script> <!-- load our main application -->
-
+	
+	
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
 </head>
 <!-- SET THE CONTROLLER -->
 <body ng-controller="mainController">
@@ -73,12 +76,42 @@
 			</div>
 		</div>
 
-		<div class="text-center text-muted">
+		<!--div class="text-center text-muted">
 			<p>A demo by <a href="http://scotch.io">Scotch</a>.</p>
 			<p>Read the <a href="http://scotch.io/tutorials/javascript/creating-a-single-page-todo-app-with-node-and-angular">tutorial</a>.</p>
-		</div>
+		</div-->
 
 	</div>
 
+	<div id="room">
+  <ul>zczxc</ul>
+  <form>
+    <input class="form-control" autocomplete="off" autofocus placeholder="Сообщение...">
+  </form>
+</div>
+
+<script>
+  var socket = io.connect();
+
+  var form = $('#room form');
+  var ul = $('#room ul');
+
+  form.submit(function() {
+    var input = $(this).find('input');
+    var text = input.val();
+    input.val('');
+
+    socket.emit('message', text, function(data) {
+      $('<li>', {text: text}).appendTo(ul);
+    });
+
+    return false;
+  });
+
+  socket.on('message', function(text) {
+    $('<li>', {text: text}).appendTo(ul);
+  });
+
+</script>
 </body>
 </html>
