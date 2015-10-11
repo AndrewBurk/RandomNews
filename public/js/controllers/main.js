@@ -41,14 +41,6 @@ angular.module('todoController', [])
 
 			}
 		};
-		
-		$scope.lisenSocket = function() {
-				Todos.on('message', function(result) {
-				    $scope.todos = result;
-				});
-		};		
-		
-
 		// DELETE ==================================================================
 		// delete a todo after checking it
 		$scope.deleteTodo = function(id) {
